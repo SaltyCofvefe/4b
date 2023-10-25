@@ -1,0 +1,17 @@
+auto car
+talo house
+koira dog
+kukka flower
+kissa cat
+kirja book
+puu tree
+aurinko sun
+kukka flower
+armeija army
+sana word
+
+ralli rally
+apina monkey
+ikkuna window
+köyhä poor
+hiiri mouse

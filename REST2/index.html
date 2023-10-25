@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Oletuksena näytetään lisäyssivu
+            $('#lisays').show();
+            $('#haku').hide();
+
+            // Klikatessa "Lisäys" -nappia
+            $('#lisays-link').click(function () {
+                $('#lisays').show();
+                $('#haku').hide();
+            });
+
+            // Klikatessa "Haku" -nappia
+            $('#haku-link').click(function () {
+                $('#lisays').hide();
+                $('#haku').show();
+            });
+
+            // Klikatessa "Tallenna" -nappia
+            $('[name="Submit"]').click(function () {
+                var suomi = $('#fi').val();
+                var englanti = $('#en').val();
+
+                $.ajax({
+                    type: 'POST',
+                    url: 'http://localhost:3000/sanakirja',
+                    data: JSON.stringify({ suomi: suomi, englanti: englanti }),
+                    contentType: 'application/json',
+                    success: function (data) {
+                        alert(data.success);
+                    },
+                    error: function (err) {
+                        alert('Virhe: ' + err.responseText);
+                    }
+                });
+            });
+
+            // Klikatessa "Hae" -nappia
+            $('[name="Etsi"]').click(function () {
+                var sana = $('#etsiSana').val();
+
+                $.ajax({
+                    type: 'GET',
+                    url: 'http://localhost:3000/sanakirja/' + sana,
+                    success: function (data) {
+                        $('#result').text('Suomi: ' + data.suomi + ', Englanti: ' + data.englanti);
+                    },
+                    error: function (err) {
+                        $('#result').text('Sanaa ei löytynyt');
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <div id="menu">
+        <a href="#" id="lisays-link">Lisäys</a> | <a href="#" id="haku-link">Haku</a>
+    </div>
+
+    <div id="lisays">
+        <h2>Lisää sana</h2>
+        <form id="form" name="form">
+            <table>
+                <tr>
+                    <td>Suomi:</td>
+                    <td><input name="fi" id="fi" type="text" value="" maxlength="35" size="35" /></td>
+                </tr>
+                <tr>
+                    <td>Englanti:</td>
+                    <td><input name="en" id="en" type="text" value="" maxlength="35" size="35" /></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><input name="Submit" type="button" value="Tallenna" /></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+
+    <div id="haku">
+        <h2>Hae sanaa</h2>
+        <input name="etsiSana" id="etsiSana" type="text" value="" />
+        <input name="Etsi" type="button" value="Hae" />
+        <div id="result"></div>
+    </div>
+</body>
+</html>
